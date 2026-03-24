@@ -73,11 +73,11 @@ export default function Layout() {
 
         <nav className="flex-1 px-4 space-y-1.5 mt-6 overflow-y-auto custom-scrollbar">
           <div className="px-4 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Menu</div>
-          <NavItem to="/" icon={LayoutDashboard} label="Dashboard" />
-          <NavItem to="/time" icon={Clock} label="Time Log" />
-          <NavItem to="/projects" icon={Briefcase} label="Projects" />
-          <NavItem to="/clients" icon={Users} label="Clients" />
-          <NavItem to="/invoices" icon={FileText} label="Invoices" />
+          <NavItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" />
+          <NavItem to="/dashboard/time" icon={Clock} label="Time Log" />
+          <NavItem to="/dashboard/projects" icon={Briefcase} label="Projects" />
+          <NavItem to="/dashboard/clients" icon={Users} label="Clients" />
+          <NavItem to="/dashboard/invoices" icon={FileText} label="Invoices" />
         </nav>
 
         {/* Active Timer Widget in Sidebar */}
@@ -129,9 +129,9 @@ export default function Layout() {
             </button>
             
             <h1 className="text-2xl font-bold text-slate-800 hidden md:block tracking-tight">
-              {location.pathname === '/' ? 'Dashboard' : 
-               location.pathname === '/time' ? 'Time Log' :
-               location.pathname.slice(1).charAt(0).toUpperCase() + location.pathname.slice(2)}
+              {location.pathname === '/dashboard' ? 'Dashboard' : 
+               location.pathname === '/dashboard/time' ? 'Time Log' :
+               location.pathname.replace('/dashboard/', '').charAt(0).toUpperCase() + location.pathname.replace('/dashboard/', '').slice(1)}
             </h1>
           </div>
 

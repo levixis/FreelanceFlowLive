@@ -31,7 +31,7 @@ export default function Login() {
       }
 
       login(data);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Failed to connect to server');
     } finally {

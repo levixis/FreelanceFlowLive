@@ -7,12 +7,18 @@ import ClientsProjects from './pages/ClientsProjects';
 import Invoicing from './pages/Invoicing';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import LandingPage from './pages/LandingPage';
 import { StoreProvider } from './context/Store';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+};
+
+const PublicOnlyRoute = ({ children }: { children: React.ReactElement }) => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : children;
 };
 
 export default function App() {
@@ -21,11 +27,12 @@ export default function App() {
       <StoreProvider>
         <HashRouter>
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<PublicOnlyRoute><LandingPage /></PublicOnlyRoute>} />
+            <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
+            <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
             
             <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<Layout />}>
+              <Route path="/dashboard" element={<Layout />}>
                 <Route index element={<Dashboard />} />
                 <Route path="time" element={<TimeLog />} />
                 <Route path="projects" element={<ClientsProjects />} />
