@@ -11,13 +11,19 @@ import timeEntryRoutes from './routes/timeEntries.js';
 dotenv.config();
 
 const app = express();
-// Changed default port to 5001 to avoid conflict with AirPlay Receiver (port 5000) on macOS
 const PORT = process.env.PORT || 5001; 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_123';
 
-// Middleware
-app.use(cors());
+// Middleware - CORS configured for production & development
+const corsOptions = {
+  origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : '*',
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
+
+// Health check endpoint (used by Render)
+app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -31,10 +37,10 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/freela
 mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
-    // For demo purposes if .env is missing
     if (!process.env.JWT_SECRET) console.log('Warning: JWT_SECRET not set in .env, using default.');
     
-    app.listen(PORT, () => {
+    // Bind to 0.0.0.0 so Render can reach the server
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
     });
   })
