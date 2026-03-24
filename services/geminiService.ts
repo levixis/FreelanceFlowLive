@@ -2,9 +2,9 @@ import { GoogleGenAI } from "@google/genai";
 import { TimeEntry, Project, Client } from "../types";
 
 const getClient = () => {
-  const apiKey = process.env.API_KEY;
+  const apiKey = import.meta.env?.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' && process.env?.API_KEY);
   if (!apiKey) {
-    console.warn("API_KEY is missing. AI features will not work.");
+    console.warn("VITE_GEMINI_API_KEY is missing. AI features will not work.");
     return null;
   }
   return new GoogleGenAI({ apiKey });
