@@ -15,8 +15,14 @@ const PORT = process.env.PORT || 5001;
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_123';
 
 // Middleware - CORS configured for production & development
+const allowedOrigins = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : null;
 const corsOptions = {
-  origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : '*',
+  origin: allowedOrigins 
+    ? allowedOrigins 
+    : function (origin, callback) {
+        // Allow all origins when FRONTEND_URL is not set (dev mode / open API)
+        callback(null, true);
+      },
   credentials: true,
 };
 app.use(cors(corsOptions));
